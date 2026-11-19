@@ -120,6 +120,8 @@ export function translateAuthError(error: unknown): string {
       return 'O navegador bloqueou o pop-up de login. Permita pop-ups para este site e tente novamente.';
     case 'auth/operation-not-allowed':
       return 'O login com e-mail e senha ainda não está habilitado no Firebase Authentication deste projeto. Ative o provedor "E-mail/senha" no Console do Firebase ou entre com o Google.';
+    case 'auth/unauthorized-domain':
+      return 'Este domínio (ex.: Vercel) ainda não está autorizado no Firebase Authentication. Adicione o domínio do seu site em Authentication > Configurações > Domínios autorizados no Console do Firebase.';
     case 'auth/network-request-failed':
       return 'Falha de rede ao se comunicar com a autenticação. Verifique sua internet.';
     case 'auth/requires-recent-login':

@@ -336,7 +336,7 @@ service cloud.firestore {
 
     // Perguntas
     match /questions/{questionId} {
-      allow get: if isSignedIn() && isValidId(questionId) && (existing().visibility == 'community' || isOwner(existing().authorId) || isAdmin());
+      allow get: if isSignedIn() && isValidId(questionId) && (resource == null || existing().visibility == 'community' || isOwner(existing().authorId) || isAdmin());
       allow list: if isSignedIn() && resource.data.visibility == 'community';
       allow create: if isVerifiedUser() &&
         isValidId(questionId) &&
@@ -419,7 +419,7 @@ service cloud.firestore {
 
     // Respostas
     match /answers/{answerId} {
-      allow get: if isSignedIn() && isValidId(answerId) && (existing().visibility == 'community' || isOwner(existing().authorId) || isAdmin());
+      allow get: if isSignedIn() && isValidId(answerId) && (resource == null || existing().visibility == 'community' || isOwner(existing().authorId) || isAdmin());
       allow list: if isSignedIn() && resource.data.visibility == 'community';
       allow create: if isVerifiedUser() &&
         isValidId(answerId) &&
@@ -487,7 +487,7 @@ service cloud.firestore {
 
     // Complementações vinculadas às respostas
     match /complements/{complementId} {
-      allow get: if isSignedIn() && isValidId(complementId) && (existing().visibility == 'community' || isOwner(existing().authorId) || isAdmin());
+      allow get: if isSignedIn() && isValidId(complementId) && (resource == null || existing().visibility == 'community' || isOwner(existing().authorId) || isAdmin());
       allow list: if isSignedIn() && resource.data.visibility == 'community';
       allow create: if isVerifiedUser() &&
         isValidId(complementId) &&
@@ -562,7 +562,10 @@ service cloud.firestore {
 
     // Favoritos / Perguntas salvas (id determinístico: userId_questionId)
     match /bookmarks/{bookmarkId} {
-      allow get: if isSignedIn() && isValidCompositeId(bookmarkId) && isOwner(existing().userId);
+      allow get: if isSignedIn() && isValidCompositeId(bookmarkId) && (
+        (resource == null && bookmarkId.matches('^' + request.auth.uid + '_[a-zA-Z0-9_\\-]+$')) ||
+        (resource != null && isOwner(existing().userId))
+      );
       allow list: if isSignedIn() && resource.data.userId == request.auth.uid;
       allow create: if isVerifiedUser() &&
         isValidCompositeId(bookmarkId) &&
@@ -577,7 +580,7 @@ service cloud.firestore {
 
     // Notificações
     match /notifications/{notificationId} {
-      allow get: if isSignedIn() && isValidId(notificationId) && (isOwner(existing().recipientId) || isAdmin());
+      allow get: if isSignedIn() && isValidId(notificationId) && (resource == null || isOwner(existing().recipientId) || isAdmin());
       allow list: if isSignedIn() && resource.data.recipientId == request.auth.uid;
       allow create: if isVerifiedUser() &&
         isValidId(notificationId) &&
@@ -606,7 +609,10 @@ service cloud.firestore {
 
     // Denúncias e moderação
     match /reports/{reportId} {
-      allow get: if isSignedIn() && isValidCompositeId(reportId) && (isOwner(existing().reporterId) || isAdmin());
+      allow get: if isSignedIn() && isValidCompositeId(reportId) && (
+        (resource == null && reportId.matches('^' + request.auth.uid + '_[a-zA-Z0-9_\\-]+$')) ||
+        (resource != null && (isOwner(existing().reporterId) || isAdmin()))
+      );
       allow list: if isAdmin() || (isSignedIn() && resource.data.reporterId == request.auth.uid);
       allow create: if isVerifiedUser() &&
         isValidCompositeId(reportId) &&
