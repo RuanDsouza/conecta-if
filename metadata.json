@@ -1,0 +1,8 @@
+{
+  "name": "Conecta IF",
+  "description": "Rede social acadêmica colaborativa do Instituto Federal Baiano (IF Baiano) para compartilhamento de dúvidas escolares, respostas e construção coletiva de conhecimento.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

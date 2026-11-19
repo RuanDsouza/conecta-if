@@ -1,0 +1,240 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Perfil público acadêmico do estudante (sem dados sensíveis ou PII como e-mail).",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "displayName": { "type": "string", "minLength": 2, "maxLength": 80 },
+        "campus": { "type": "string", "minLength": 2, "maxLength": 100 },
+        "course": { "type": "string", "minLength": 2, "maxLength": 120 },
+        "year": { "type": "string", "minLength": 0, "maxLength": 40 },
+        "bio": { "type": "string", "minLength": 0, "maxLength": 300 },
+        "avatarUrl": { "type": "string", "minLength": 0, "maxLength": 500 },
+        "showCampus": { "type": "boolean" },
+        "showCourse": { "type": "boolean" },
+        "showStats": { "type": "boolean" },
+        "questionsCount": { "type": "integer" },
+        "answersCount": { "type": "integer" },
+        "helpfulCount": { "type": "integer" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "displayName", "campus", "course", "showCampus", "showCourse", "showStats", "questionsCount", "answersCount", "helpfulCount", "createdAt", "updatedAt"]
+    },
+    "UserPrivate": {
+      "title": "UserPrivate",
+      "description": "Dados privados e de conformidade do estudante (PII isolado, acessível apenas pelo titular e administradores).",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "email": { "type": "string", "minLength": 5, "maxLength": 180 },
+        "institutionalDomainVerified": { "type": "boolean" },
+        "acceptedTerms": { "type": "boolean" },
+        "acceptedTermsAt": { "type": "string", "format": "date-time" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "email", "institutionalDomainVerified", "acceptedTerms", "acceptedTermsAt", "createdAt", "updatedAt"]
+    },
+    "Subject": {
+      "title": "Subject",
+      "description": "Disciplina acadêmica configurável.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 2, "maxLength": 64, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "name": { "type": "string", "minLength": 2, "maxLength": 80 },
+        "area": { "type": "string", "minLength": 2, "maxLength": 80 },
+        "active": { "type": "boolean" },
+        "order": { "type": "integer" }
+      },
+      "required": ["id", "name", "area", "active", "order"]
+    },
+    "Question": {
+      "title": "Question",
+      "description": "Dúvida acadêmica publicada por estudante.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "authorId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "authorName": { "type": "string", "minLength": 2, "maxLength": 80 },
+        "authorCampus": { "type": "string", "minLength": 0, "maxLength": 100 },
+        "authorCourse": { "type": "string", "minLength": 0, "maxLength": 120 },
+        "authorAvatarUrl": { "type": "string", "minLength": 0, "maxLength": 500 },
+        "title": { "type": "string", "minLength": 10, "maxLength": 150 },
+        "body": { "type": "string", "minLength": 20, "maxLength": 5000 },
+        "codeSnippet": { "type": "string", "minLength": 0, "maxLength": 2500 },
+        "referenceUrl": { "type": "string", "minLength": 0, "maxLength": 400 },
+        "subjectId": { "type": "string", "minLength": 2, "maxLength": 64, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "subjectName": { "type": "string", "minLength": 2, "maxLength": 80 },
+        "campusId": { "type": "string", "minLength": 0, "maxLength": 100 },
+        "courseId": { "type": "string", "minLength": 0, "maxLength": 120 },
+        "tags": { "type": "array", "description": "Máximo de 5 tags curtas" },
+        "status": { "type": "string", "enum": ["open", "resolved"] },
+        "visibility": { "type": "string", "enum": ["community", "removed"] },
+        "answersCount": { "type": "integer" },
+        "lastAnswerId": { "type": "string", "minLength": 0, "maxLength": 128 },
+        "lastRemovedAnswerId": { "type": "string", "minLength": 0, "maxLength": 128 },
+        "isEdited": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" },
+        "lastActivityAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "authorId", "authorName", "authorCampus", "authorCourse", "authorAvatarUrl", "title", "body", "codeSnippet", "referenceUrl", "subjectId", "subjectName", "campusId", "courseId", "tags", "status", "visibility", "answersCount", "lastAnswerId", "lastRemovedAnswerId", "isEdited", "createdAt", "updatedAt", "lastActivityAt"]
+    },
+    "Answer": {
+      "title": "Answer",
+      "description": "Resposta publicada para uma dúvida.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "questionId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "authorId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "authorName": { "type": "string", "minLength": 2, "maxLength": 80 },
+        "authorCampus": { "type": "string", "minLength": 0, "maxLength": 100 },
+        "authorCourse": { "type": "string", "minLength": 0, "maxLength": 120 },
+        "authorAvatarUrl": { "type": "string", "minLength": 0, "maxLength": 500 },
+        "body": { "type": "string", "minLength": 10, "maxLength": 5000 },
+        "codeSnippet": { "type": "string", "minLength": 0, "maxLength": 2500 },
+        "helpfulCount": { "type": "integer" },
+        "visibility": { "type": "string", "enum": ["community", "removed"] },
+        "isEdited": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "questionId", "authorId", "authorName", "authorCampus", "authorCourse", "authorAvatarUrl", "body", "codeSnippet", "helpfulCount", "visibility", "isEdited", "createdAt", "updatedAt"]
+    },
+    "AnswerComplement": {
+      "title": "AnswerComplement",
+      "description": "Complementação vinculada a uma resposta existente (preservando autoria própria).",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "questionId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "answerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "authorId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "authorName": { "type": "string", "minLength": 2, "maxLength": 80 },
+        "authorRoleLabel": { "type": "string", "enum": ["Autor da pergunta", "Autor da resposta"] },
+        "body": { "type": "string", "minLength": 5, "maxLength": 2000 },
+        "visibility": { "type": "string", "enum": ["community", "removed"] },
+        "isEdited": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "questionId", "answerId", "authorId", "authorName", "authorRoleLabel", "body", "visibility", "isEdited", "createdAt", "updatedAt"]
+    },
+    "HelpfulVote": {
+      "title": "HelpfulVote",
+      "description": "Registro único de agradecimento/utilidade de um estudante para uma resposta.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 260, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "userId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "answerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "questionId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "answerAuthorId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "userId", "answerId", "questionId", "answerAuthorId", "createdAt"]
+    },
+    "Bookmark": {
+      "title": "Bookmark",
+      "description": "Pergunta salva nos favoritos de um estudante.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 260, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "userId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "questionId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "questionTitle": { "type": "string", "minLength": 1, "maxLength": 150 },
+        "subjectName": { "type": "string", "minLength": 2, "maxLength": 80 },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "userId", "questionId", "questionTitle", "subjectName", "createdAt"]
+    },
+    "Notification": {
+      "title": "Notification",
+      "description": "Notificação persistente de atividade colaborativa para um estudante.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "recipientId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "actorId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "actorName": { "type": "string", "minLength": 2, "maxLength": 80 },
+        "type": { "type": "string", "enum": ["new_answer", "new_complement", "helpful_answer"] },
+        "relatedQuestionId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "relatedQuestionTitle": { "type": "string", "minLength": 1, "maxLength": 150 },
+        "relatedAnswerId": { "type": "string", "minLength": 0, "maxLength": 128 },
+        "readAt": { "type": "string", "format": "date-time" },
+        "isRead": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "recipientId", "actorId", "actorName", "type", "relatedQuestionId", "relatedQuestionTitle", "relatedAnswerId", "isRead", "createdAt"]
+    },
+    "Report": {
+      "title": "Report",
+      "description": "Denúncia de conteúdo inadequado para moderação.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 260, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "reporterId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "targetType": { "type": "string", "enum": ["question", "answer", "complement", "profile"] },
+        "targetId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "targetExcerpt": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "reason": { "type": "string", "enum": ["harassment", "spam", "inappropriate", "pii_exposed", "off_topic"] },
+        "description": { "type": "string", "minLength": 0, "maxLength": 600 },
+        "status": { "type": "string", "enum": ["pending", "reviewed", "dismissed", "action_taken"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "reviewedBy": { "type": "string", "minLength": 0, "maxLength": 128 },
+        "reviewedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "reporterId", "targetType", "targetId", "targetExcerpt", "reason", "description", "status", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Perfis públicos acadêmicos dos estudantes (sem PII)."
+    },
+    "/user_private/{userId}": {
+      "schema": { "$ref": "#/entities/UserPrivate" },
+      "description": "Dados privados e termos aceitos do estudante (somente titular e admin)."
+    },
+    "/admins/{userId}": {
+      "schema": "object",
+      "description": "Registro administrativo confiável (somente leitura para verificação; escrita bloqueada no cliente)."
+    },
+    "/subjects/{subjectId}": {
+      "schema": { "$ref": "#/entities/Subject" },
+      "description": "Catálogo configurável de disciplinas acadêmicas."
+    },
+    "/questions/{questionId}": {
+      "schema": { "$ref": "#/entities/Question" },
+      "description": "Perguntas publicadas pelos estudantes no Conecta IF."
+    },
+    "/answers/{answerId}": {
+      "schema": { "$ref": "#/entities/Answer" },
+      "description": "Respostas enviadas às perguntas abertas."
+    },
+    "/complements/{complementId}": {
+      "schema": { "$ref": "#/entities/AnswerComplement" },
+      "description": "Complementações vinculadas às respostas."
+    },
+    "/helpful_votes/{voteId}": {
+      "schema": { "$ref": "#/entities/HelpfulVote" },
+      "description": "Votos únicos de resposta útil (id determinístico answerId_userId)."
+    },
+    "/bookmarks/{bookmarkId}": {
+      "schema": { "$ref": "#/entities/Bookmark" },
+      "description": "Perguntas salvas nos favoritos (id determinístico userId_questionId)."
+    },
+    "/notifications/{notificationId}": {
+      "schema": { "$ref": "#/entities/Notification" },
+      "description": "Notificações privadas por usuário."
+    },
+    "/reports/{reportId}": {
+      "schema": { "$ref": "#/entities/Report" },
+      "description": "Denúncias de moderação."
+    }
+  }
+}
